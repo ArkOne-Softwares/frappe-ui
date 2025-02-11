@@ -85,7 +85,7 @@ module.exports = plugin(
       },
       fontSize: {
         '2xs': [
-          '11px',
+          '13px',  // Increased from 11px
           {
             lineHeight: '1.15',
             letterSpacing: '0.01em',
@@ -93,7 +93,7 @@ module.exports = plugin(
           },
         ],
         xs: [
-          '12px',
+          '14px',  // Increased from 12px
           {
             lineHeight: '1.15',
             letterSpacing: '0.02em',
@@ -101,7 +101,7 @@ module.exports = plugin(
           },
         ],
         sm: [
-          '13px',
+          '15px',  // Increased from 13px
           {
             lineHeight: '1.15',
             letterSpacing: '0.02em',
@@ -109,7 +109,7 @@ module.exports = plugin(
           },
         ],
         base: [
-          '14px',
+          '16px',  // Increased from 14px
           {
             lineHeight: '1.15',
             letterSpacing: '0.02em',
@@ -117,7 +117,7 @@ module.exports = plugin(
           },
         ],
         lg: [
-          '16px',
+          '18px',  // Increased from 16px
           {
             lineHeight: '1.15',
             letterSpacing: '0.02em',
@@ -125,7 +125,7 @@ module.exports = plugin(
           },
         ],
         xl: [
-          '18px',
+          '20px',  // Increased from 18px
           {
             lineHeight: '1.15',
             letterSpacing: '0.01em',
@@ -133,7 +133,7 @@ module.exports = plugin(
           },
         ],
         '2xl': [
-          '20px',
+          '22px',  // Increased from 20px
           {
             lineHeight: '1.15',
             letterSpacing: '0.01em',
@@ -141,16 +141,16 @@ module.exports = plugin(
           },
         ],
         '3xl': [
-          '24px',
+          '26px',  // Increased from 24px
           {
             lineHeight: '1.15',
             fontWeight: 400,
             letterSpacing: '0.005em',
           },
         ],
-        // font size for paragraphs
+        // Paragraph sizes adjusted similarly
         'p-2xs': [
-          '11px',
+          '13px',  // Increased from 11px
           {
             lineHeight: '1.6',
             letterSpacing: '0.01em',
@@ -158,7 +158,7 @@ module.exports = plugin(
           },
         ],
         'p-xs': [
-          '12px',
+          '14px',  // Increased from 12px
           {
             lineHeight: '1.6',
             letterSpacing: '0.02em',
@@ -166,7 +166,7 @@ module.exports = plugin(
           },
         ],
         'p-sm': [
-          '13px',
+          '15px',  // Increased from 13px
           {
             lineHeight: '1.5',
             letterSpacing: '0.02em',
@@ -174,7 +174,7 @@ module.exports = plugin(
           },
         ],
         'p-base': [
-          '14px',
+          '16px',  // Increased from 14px
           {
             lineHeight: '1.5',
             letterSpacing: '0.02em',
@@ -182,7 +182,7 @@ module.exports = plugin(
           },
         ],
         'p-lg': [
-          '16px',
+          '18px',  // Increased from 16px
           {
             lineHeight: '1.5',
             letterSpacing: '0.02em',
@@ -190,7 +190,7 @@ module.exports = plugin(
           },
         ],
         'p-xl': [
-          '18px',
+          '20px',  // Increased from 18px
           {
             lineHeight: '1.42',
             letterSpacing: '0.01em',
@@ -198,7 +198,7 @@ module.exports = plugin(
           },
         ],
         'p-2xl': [
-          '20px',
+          '22px',  // Increased from 20px
           {
             lineHeight: '1.38',
             letterSpacing: '0.01em',
@@ -206,7 +206,7 @@ module.exports = plugin(
           },
         ],
         'p-3xl': [
-          '24px',
+          '26px',  // Increased from 24px
           {
             lineHeight: '1.2',
             fontWeight: 400,

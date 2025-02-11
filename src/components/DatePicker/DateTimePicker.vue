@@ -50,29 +50,17 @@
             class="text-sm"
             type="text"
             :value="dateValue"
-            @change="
-              (e: Event) => {
-                updateDate((e.target as HTMLInputElement).value)
-                togglePopover()
-              }
-            "
+            @change="(e: Event) => { updateDate((e.target as HTMLInputElement).value); togglePopover() }"
           />
           <Button
             :label="'Now'"
             class="text-sm"
-            @click="
-              () => {
-                selectDate(getDate(), true)
-                togglePopover()
-              }
-            "
+            @click="() => { selectDate(getDate(), true); togglePopover() }"
           />
         </div>
 
         <!-- Date Picker -->
-        <div
-          class="flex flex-col items-center justify-center p-1 text-ink-gray-8"
-        >
+        <div class="flex flex-col items-center justify-center p-1 text-ink-gray-8">
           <div class="flex items-center text-xs uppercase">
             <div
               class="flex h-6 w-8 items-center justify-center text-center"
@@ -93,92 +81,62 @@
               class="flex h-8 w-8 cursor-pointer items-center justify-center rounded hover:bg-surface-gray-2"
               :class="{
                 'text-ink-gray-3': date.getMonth() !== currentMonth - 1,
-                'font-extrabold text-ink-gray-9':
-                  toValue(date) === toValue(today),
-                'bg-surface-gray-6 text-ink-white hover:bg-surface-gray-6':
-                  toValue(date) === dateValue,
+                'font-extrabold text-ink-gray-9': toValue(date) === toValue(today),
+                'bg-surface-gray-6 text-ink-white hover:bg-surface-gray-6': toValue(date) === dateValue,
               }"
-              @click="
-                () => {
-                  selectDate(date)
-                  togglePopover()
-                }
-              "
+              @click="() => { selectDate(date); togglePopover() }"
             >
               {{ date.getDate() }}
             </div>
           </div>
         </div>
 
-        <!-- Time Picker -->
-        <div class="flex items-center justify-around gap-2 p-1">
-          <div>
-            {{ twoDigit(hour) }} : {{ twoDigit(minute) }} :
-            {{ twoDigit(second) }}
+        <!-- New Time Picker -->
+        <div class="flex justify-around gap-4 p-2">
+          <div class="text-center">
+            <div class="text-sm font-bold">Hour</div>
+            <Button variant="ghost" class="m-1" @click="increaseHour">
+              <FeatherIcon name="chevron-up" class="h-4 w-4" />
+            </Button>
+            <div class="text-xl font-bold">{{ twoDigit(hour) }}</div>
+            <Button variant="ghost" class="m-1" @click="decreaseHour">
+              <FeatherIcon name="chevron-down" class="h-4 w-4" />
+            </Button>
           </div>
-          <div class="flex flex-col items-center justify-center">
-            <div class="slider flex min-h-4 items-center justify-center">
-              <TextInput
-                v-model="hour"
-                name="hours"
-                type="range"
-                min="0"
-                max="23"
-                step="1"
-                @change="
-                  () => {
-                    changeTime()
-                    togglePopover()
-                  }
-                "
-              />
-            </div>
-            <div class="slider flex min-h-4 items-center justify-center">
-              <TextInput
-                v-model="minute"
-                name="minutes"
-                type="range"
-                min="0"
-                max="59"
-                step="1"
-                @change="
-                  () => {
-                    changeTime()
-                    togglePopover()
-                  }
-                "
-              />
-            </div>
-            <div class="slider flex min-h-4 items-center justify-center">
-              <TextInput
-                v-model="second"
-                name="seconds"
-                type="range"
-                min="0"
-                max="59"
-                step="1"
-                @change="
-                  () => {
-                    changeTime()
-                    togglePopover()
-                  }
-                "
-              />
-            </div>
+          <div class="text-center">
+            <div class="text-sm font-bold">Minute</div>
+            <Button variant="ghost" class="m-1" @click="increaseMinute">
+              <FeatherIcon name="chevron-up" class="h-4 w-4" />
+            </Button>
+            <div class="text-xl font-bold">{{ twoDigit(minute) }}</div>
+            <Button variant="ghost" class="m-1" @click="decreaseMinute">
+              <FeatherIcon name="chevron-down" class="h-4 w-4" />
+            </Button>
           </div>
+          <div class="text-center">
+            <div class="text-sm font-bold">Second</div>
+            <Button variant="ghost" class="m-1" @click="increaseSecond">
+              <FeatherIcon name="chevron-up" class="h-4 w-4" />
+            </Button>
+            <div class="text-xl font-bold">{{ twoDigit(second) }}</div>
+            <Button variant="ghost" class="m-1" @click="decreaseSecond">
+              <FeatherIcon name="chevron-down" class="h-4 w-4" />
+            </Button>
+            </div>
         </div>
 
         <!-- Actions -->
-        <div class="flex justify-end p-1">
+        <div class="flex justify-between p-1">
           <Button
             :label="'Clear'"
             class="text-sm"
-            @click="
-              () => {
-                selectDate('')
-                togglePopover()
-              }
-            "
+            theme="red"
+            @click="() => { selectDate(''); togglePopover() }"
+          />
+          <Button
+            :label="'Done'"
+            class="text-sm"
+            @click="togglePopover"
           />
         </div>
       </div>
@@ -244,7 +202,7 @@ function selectDate(date: Date | string, isNow: boolean = false) {
     date = dayjsLocal(date)
     hour.value = date.hour()
     minute.value = date.minute()
-    second.value = date.second()
+    second.value = 0
   }
 
   let systemParsedDate = date
@@ -257,7 +215,6 @@ function selectDate(date: Date | string, isNow: boolean = false) {
 function toValue(date: Date | string) {
   if (!date || date.toString() === 'Invalid Date') return ''
 
-  // "YYYY-MM-DD HH:mm:ss"
   return dayjs(date)
     .set('hour', hour.value)
     .set('minute', minute.value)
@@ -273,7 +230,7 @@ function updateDate(date: Date | string) {
   date = getDate(date)
   hour.value = date.getHours()
   minute.value = date.getMinutes()
-  second.value = date.getSeconds()
+  second.value =0
   selectDate(date)
 }
 
@@ -286,7 +243,37 @@ function selectCurrentMonthYear() {
   currentMonth.value = date.getMonth() + 1
   hour.value = date.getHours()
   minute.value = date.getMinutes()
-  second.value = date.getSeconds()
+  second.value = 0
+}
+
+function increaseHour() {
+  hour.value = (hour.value + 1) % 24
+  changeTime()
+}
+
+function decreaseHour() {
+  hour.value = (hour.value + 23) % 24
+  changeTime()
+}
+
+function increaseMinute() {
+  minute.value = (minute.value + 1) % 60
+  changeTime()
+}
+
+function decreaseMinute() {
+  minute.value = (minute.value + 59) % 60
+  changeTime()
+}
+
+function increaseSecond() {
+  second.value = (second.value + 1) % 60
+  changeTime()
+}
+
+function decreaseSecond() {
+  second.value = (second.value + 59) % 60
+  changeTime()
 }
 
 onMounted(() => selectCurrentMonthYear())
@@ -297,50 +284,5 @@ onMounted(() => selectCurrentMonthYear())
   --trackHeight: 1px;
   --thumbRadius: 10px;
 }
-:deep(.slider input[type='range']) {
-  -webkit-appearance: none;
-  appearance: none;
-  height: 100%;
-  background: transparent;
-  padding: 0;
-  margin: 0;
-  cursor: pointer;
-}
-
-:deep(.slider input[type='range']::-webkit-slider-runnable-track) {
-  appearance: none;
-  background: #000;
-  height: var(--trackHeight);
-  border-radius: 999px;
-}
-
-:deep(.slider input[type='range']:focus-visible) {
-  outline: none;
-}
-
-:deep(.slider input[type='range']::-webkit-slider-thumb) {
-  width: var(--thumbRadius);
-  height: var(--thumbRadius);
-  margin-top: calc((var(--trackHeight) - var(--thumbRadius)) / 2);
-  background: #fff;
-  border-radius: 3px;
-  pointer-events: all;
-  appearance: none;
-  outline: 1px solid #777777;
-  z-index: 1;
-}
-
-:deep(.slider:hover input[type='range']::-webkit-slider-thumb) {
-  outline: 1px solid #000;
-}
-:deep(.slider input[type='range']::-webkit-slider-thumb) {
-  width: var(--thumbRadius);
-  height: var(--thumbRadius);
-  margin-top: calc((var(--trackHeight) - var(--thumbRadius)) / 2);
-  background: #fff;
-  border-radius: 3px;
-  pointer-events: all;
-  appearance: none;
-  z-index: 1;
-}
+/* Removed old slider styles */
 </style>

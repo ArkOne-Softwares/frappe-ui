@@ -77,8 +77,8 @@ export interface ButtonProps {
 }
 
 const props = withDefaults(defineProps<ButtonProps>(), {
-  theme: 'gray',
-  size: 'sm',
+  theme: 'green',
+  size: 'md',
   variant: 'subtle',
   loading: false,
   disabled: false,
