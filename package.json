@@ -1,6 +1,6 @@
 {
   "name": "@arkonesoft/frappe-ui",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A set of components and utilities for rapid UI development",
   "main": "./src/index.js",
   "scripts": {
@@ -22,9 +22,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/frappe/frappe-ui.git"
+    "url": "https://github.com/ArkOne-Softwares/frappe-ui.git"
   },
-  "author": "Frappe Technologies Pvt. Ltd.",
+  "author": "ArkOne Softwares",
   "license": "MIT",
   "dependencies": {
     "@headlessui/vue": "^1.7.14",
