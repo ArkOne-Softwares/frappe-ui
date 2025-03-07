@@ -77,7 +77,7 @@ export interface ButtonProps {
 }
 
 const props = withDefaults(defineProps<ButtonProps>(), {
-  theme: 'green',
+  theme: 'blue',
   size: 'md',
   variant: 'subtle',
   loading: false,

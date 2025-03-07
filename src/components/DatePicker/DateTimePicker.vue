@@ -50,12 +50,12 @@
             class="text-sm"
             type="text"
             :value="dateValue"
-            @change="(e: Event) => { updateDate((e.target as HTMLInputElement).value); togglePopover() }"
+            @change="(e: Event) => { updateDate((e.target as HTMLInputElement).value); }"
           />
           <Button
             :label="'Now'"
             class="text-sm"
-            @click="() => { selectDate(getDate(), true); togglePopover() }"
+            @click="() => { selectDate(getDate(), true); }"
           />
         </div>
 
@@ -84,7 +84,7 @@
                 'font-extrabold text-ink-gray-9': toValue(date) === toValue(today),
                 'bg-surface-gray-6 text-ink-white hover:bg-surface-gray-6': toValue(date) === dateValue,
               }"
-              @click="() => { selectDate(date); togglePopover() }"
+              @click="() => { selectDate(date);}"
             >
               {{ date.getDate() }}
             </div>
