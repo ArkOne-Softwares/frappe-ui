@@ -262,7 +262,6 @@ img.ProseMirror-selectednode {
   top: 0;
   bottom: 0;
   pointer-events: none;
-  background: theme('colors.blue.200');
   opacity: 0.3;
 }
 
@@ -272,7 +271,6 @@ img.ProseMirror-selectednode {
   top: 0;
   bottom: -2px;
   width: 4px;
-  background-color: theme('colors.blue.200');
   pointer-events: none;
 }
 
