@@ -1,5 +1,10 @@
 <template>
-  <div class="relative w-full" :class="$attrs.class" v-if="editor">
+  <div
+    class="relative w-full"
+    :class="$attrs.class"
+    :style="$attrs.style"
+    v-if="editor"
+  >
     <TextEditorBubbleMenu :buttons="bubbleMenu" :options="bubbleMenuOptions" />
     <TextEditorFixedMenu
       class="w-full overflow-x-auto rounded-t-lg border border-outline-gray-modals"
@@ -14,10 +19,9 @@
   </div>
 </template>
 
-<script>
-import { normalizeClass } from 'vue'
-import { computed } from '@vue/reactivity'
-import { Editor, EditorContent } from '@tiptap/vue-3'
+<script lang="ts">
+import { normalizeClass, computed } from 'vue'
+import { Editor, EditorContent, VueNodeViewRenderer } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import Placeholder from '@tiptap/extension-placeholder'
 import TextAlign from '@tiptap/extension-text-align'
@@ -25,20 +29,29 @@ import Table from '@tiptap/extension-table'
 import TableCell from '@tiptap/extension-table-cell'
 import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
-import Image from './image-extension'
-import Video from './video-extension'
-import Link from '@tiptap/extension-link'
+import { ImageExtension } from './extensions/image'
+import ImageViewerExtension from './image-viewer-extension'
+import VideoExtension from './video-extension'
+import LinkExtension from './link-extension'
 import Typography from '@tiptap/extension-typography'
 import TextStyle from '@tiptap/extension-text-style'
 import Highlight from '@tiptap/extension-highlight'
 import { Color } from '@tiptap/extension-color'
+import { common, createLowlight } from 'lowlight'
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
+import CodeBlockComponent from './CodeBlockComponent.vue'
 import configureMention from './mention'
 import TextEditorFixedMenu from './TextEditorFixedMenu.vue'
 import TextEditorBubbleMenu from './TextEditorBubbleMenu.vue'
 import TextEditorFloatingMenu from './TextEditorFloatingMenu.vue'
-import EmojiExtension from './emoji-extension'
+import EmojiExtension from './extensions/emoji/emoji-extension'
+import SlashCommands from './extensions/slash-commands/slash-commands-extension'
 import { detectMarkdown, markdownToHTML } from '../../utils/markdown'
 import { DOMParser } from 'prosemirror-model'
+import { TagNode, TagExtension } from './extensions/tag/tag-extension'
+import { Heading } from './extensions/heading/heading'
+
+const lowlight = createLowlight(common)
 
 export default {
   name: 'TextEditor',
@@ -94,6 +107,14 @@ export default {
       type: Array,
       default: () => [],
     },
+    tags: {
+      type: Array,
+      default: () => [],
+    },
+    uploadFunction: {
+      type: Function,
+      default: () => null,
+    },
   },
   emits: ['change', 'focus', 'blur'],
   expose: ['editor'],
@@ -136,6 +157,14 @@ export default {
       extensions: [
         StarterKit.configure({
           ...this.starterkitOptions,
+          codeBlock: false,
+          heading: false,
+        }),
+        Heading.configure({
+          ...(typeof this.starterkitOptions?.heading === 'object' &&
+          this.starterkitOptions.heading !== null
+            ? this.starterkitOptions.heading
+            : {}),
         }),
         Table.configure({
           resizable: true,
@@ -150,13 +179,22 @@ export default {
         TextStyle,
         Color,
         Highlight.configure({ multicolor: true }),
-        Image,
-        Video,
-        Link.configure({
+        CodeBlockLowlight.extend({
+          addNodeView() {
+            return VueNodeViewRenderer(CodeBlockComponent)
+          },
+        }).configure({ lowlight }),
+        ImageExtension.configure({
+          uploadFunction: this.uploadFunction,
+        }),
+        ImageViewerExtension,
+        VideoExtension.configure({
+          uploadFunction: this.uploadFunction,
+        }),
+        LinkExtension.configure({
           openOnClick: false,
         }),
         Placeholder.configure({
-          showOnlyWhenEditable: false,
           placeholder:
             typeof this.placeholder === 'function'
               ? this.placeholder
@@ -164,6 +202,11 @@ export default {
         }),
         configureMention(this.mentions),
         EmojiExtension,
+        SlashCommands,
+        TagNode,
+        TagExtension.configure({
+          tags: () => this.tags,
+        }),
         ...(this.extensions || []),
       ],
       onUpdate: ({ editor }) => {
@@ -228,7 +271,7 @@ export default {
 }
 
 /* Placeholder */
-.ProseMirror:not(.ProseMirror-focused) p.is-editor-empty:first-child::before {
+.ProseMirror:not(.ProseMirror-focused) p.is-editor-empty::before {
   content: attr(data-placeholder);
   float: left;
   color: var(--ink-gray-4);
@@ -282,5 +325,24 @@ img.ProseMirror-selectednode {
 .ProseMirror mark {
   border-radius: 3px;
   padding: 0 2px;
+}
+.tag-item,
+.tag-suggestion-active {
+  background-color: var(--surface-gray-1, #f8f8f8);
+  color: inherit;
+  border: 1px solid transparent;
+  padding: 0px 2px;
+  border-radius: 4px;
+  font-size: 1em;
+  white-space: nowrap;
+  cursor: default;
+}
+
+.tag-item.ProseMirror-selectednode {
+  border-color: var(--outline-gray-3, #c7c7c7);
+}
+
+.tag-suggestion-active {
+  background-color: var(--surface-gray-2, #f3f3f3);
 }
 </style>
