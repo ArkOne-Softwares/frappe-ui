@@ -1,13 +1,17 @@
 <template>
-  <div v-if="type != 'checkbox'" :class="['space-y-1.5', attrs.class]">
-    <label class="block" :class="labelClasses" v-if="label" :for="id">
-      {{ label }}
-      <span class="text-ink-red-3" v-if="required">*</span>
-    </label>
+  <div v-if="type != 'checkbox'" :class="['space-y-1.5', attrs.class]" :style="attrs.style">
+    <FormLabel
+      v-if="label"
+      :label="label"
+      :size="size"
+      :id="id"
+      :required="required"
+    />
     <Select
       v-if="type === 'select'"
       :id="id"
       v-bind="{ ...controlAttrs, size }"
+      v-model="model"
     >
       <template #prefix v-if="$slots.prefix">
         <slot name="prefix" />
@@ -16,6 +20,7 @@
     <Autocomplete
       v-else-if="type === 'autocomplete'"
       v-bind="{ ...controlAttrs }"
+      v-model="model"
     >
       <template #prefix v-if="$slots.prefix">
         <slot name="prefix" />
@@ -28,11 +33,13 @@
       v-else-if="type === 'textarea'"
       :id="id"
       v-bind="{ ...controlAttrs, size }"
+      v-model="model"
     />
     <TextInput
       v-else
       :id="id"
       v-bind="{ ...controlAttrs, type, size, required }"
+      v-model="model"
     >
       <template #prefix v-if="$slots.prefix">
         <slot name="prefix" />
@@ -49,6 +56,7 @@
     v-else
     :id="id"
     v-bind="{ ...controlAttrs, label, size, class: attrs.class }"
+    v-model="model"
   />
 </template>
 <script setup lang="ts">
@@ -60,6 +68,7 @@ import Select from './Select.vue'
 import Textarea from './Textarea.vue'
 import Checkbox from './Checkbox.vue'
 import Autocomplete from './Autocomplete.vue'
+import FormLabel from './FormLabel.vue'
 
 interface FormControlProps {
   label?: string
@@ -75,6 +84,8 @@ const props = withDefaults(defineProps<FormControlProps>(), {
   size: 'sm',
 })
 
+const model = defineModel()
+
 const attrs = useAttrs()
 const controlAttrs = computed(() => {
   // pass everything except class and style
@@ -85,16 +96,6 @@ const controlAttrs = computed(() => {
     }
   }
   return _attrs
-})
-
-const labelClasses = computed(() => {
-  return [
-    {
-      sm: 'text-xs',
-      md: 'text-base',
-    }[props.size],
-    'text-ink-gray-5',
-  ]
 })
 
 const descriptionClasses = computed(() => {

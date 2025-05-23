@@ -8,7 +8,7 @@ import {
   TooltipContent,
   TooltipArrow,
   type TooltipContentProps,
-} from 'radix-vue'
+} from 'reka-ui'
 import { computed } from 'vue'
 
 defineOptions({
@@ -29,7 +29,7 @@ const props = withDefaults(
     hoverDelay: 0.5,
     arrowClass: 'fill-surface-gray-7',
     disabled: false,
-  },
+  }
 )
 
 const delayDuration = computed(() => props.hoverDelay * 1000)
